@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Portal | KeRa Rider</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: radial-gradient(circle, #1a1a2e 0%, #05050a 100%);
+            font-family: 'Segoe UI', 'Courier New', monospace;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .portal {
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(249,199,79,0.4);
+            border-radius: 32px;
+            padding: 40px 30px;
+            width: 380px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(249,199,79,0.2);
+            animation: fadeIn 0.6s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #f9c74f;
+            letter-spacing: 4px;
+            text-shadow: 0 0 15px rgba(249,199,79,0.6);
+            margin-bottom: 10px;
+        }
+        .sub {
+            color: #aaa;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+            border-bottom: 1px dashed rgba(249,199,79,0.3);
+            display: inline-block;
+            padding-bottom: 6px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: #f9c74f;
+            letter-spacing: 1px;
+        }
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid rgba(249,199,79,0.3);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s;
+            font-family: monospace;
+        }
+        input:focus {
+            border-color: #f9c74f;
+            box-shadow: 0 0 12px rgba(249,199,79,0.3);
+            background: rgba(0,0,0,0.8);
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #f9c74f;
+            border: none;
+            border-radius: 40px;
+            color: #05050a;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
+            font-family: monospace;
+            letter-spacing: 1px;
+        }
+        button:hover {
+            background: #ffda7c;
+            transform: scale(1.01);
+            box-shadow: 0 0 15px rgba(249,199,79,0.5);
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            min-height: 50px;
+            color: #ffaa66;
+        }
+        .error {
+            color: #ff6b6b;
+        }
+        .success {
+            color: #6bffb0;
+        }
+        .demo-hint {
+            margin-top: 20px;
+            font-size: 0.7rem;
+            color: #777;
+            border-top: 1px solid #222;
+            padding-top: 12px;
+        }
+    </style>
+</head>
+<body>
+<div class="portal">
+    <h1>⚡ KeRa</h1>
+    <div class="sub">RIDER PORTAL</div>
+    <div class="input-group">
+        <label>USERNAME</label>
+        <input type="text" id="username" placeholder="Enter your name" autocomplete="off">
+    </div>
+    <div class="input-group">
+        <label>PASSWORD</label>
+        <input type="password" id="password" placeholder="••••••" autocomplete="off">
+    </div>
+    <button id="loginBtn">LAUNCH ENGINE</button>
+    <div id="messageBox" class="message"></div>
+    <div class="demo-hint">
+        🔓 Demo credentials: <strong style="color:#f9c74f;">kira / 1234</strong> or any username + "pass"
+    </div>
+</div>
+
+<script>
+    const loginBtn = document.getElementById('loginBtn');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const messageBox = document.getElementById('messageBox');
+
+    // Simple validation logic – can be changed to any rule
+    function validateCredentials(username, password) {
+        // Example 1: specific demo account
+        if (username === "kira" && password === "1234") return true;
+        // Example 2: any non-empty username with password "pass"
+        if (username.length >= 2 && password === "pass") return true;
+        // Example 3: just for testing – both fields not empty
+        if (username.trim() !== "" && password.trim() !== "") return true;
+        return false;
+    }
+
+    function showMessage(text, isError = true) {
+        messageBox.textContent = text;
+        messageBox.className = isError ? "message error" : "message success";
+        if (!isError) {
+            // Optional: redirect or show success overlay
+            setTimeout(() => {
+                alert("✅ LOGIN SUCCESSFUL!\nWelcome, " + usernameInput.value.trim());
+                // Here you would redirect to game or main menu
+                // For demo: clear message and optionally reset
+                messageBox.textContent = "";
+            }, 300);
+        }
+    }
+
+    loginBtn.addEventListener('click', () => {
+        const user = usernameInput.value.trim();
+        const pwd = passwordInput.value.trim();
+
+        if (user === "" || pwd === "") {
+            showMessage("❌ Please enter both username and password.", true);
+            return;
+        }
+
+        if (validateCredentials(user, pwd)) {
+            showMessage("✔️ Authentication successful! Redirecting...", false);
+            // Simulate redirect: you can replace with window.location.href = "game.html"
+            // or just clear the portal after success
+            setTimeout(() => {
+                // Clear form and show a final ready message (or reload portal)
+                document.querySelector('.portal').style.opacity = '0.3';
+                messageBox.innerHTML = "🚀 Engine started. Game ready!";
+                messageBox.className = "message success";
+                // (optional) disable further login attempts
+                loginBtn.disabled = true;
+                usernameInput.disabled = true;
+                passwordInput.disabled = true;
+            }, 1000);
+        } else {
+            showMessage("⚠️ Invalid credentials. Try: kira / 1234   or   any name / pass", true);
+        }
+    });
+
+    // Allow Enter key to submit
+    const inputs = [usernameInput, passwordInput];
+    inputs.forEach(inp => {
+        inp.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') loginBtn.click();
+        });
+    });
+</script>
+</body>
+</html>
